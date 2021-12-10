@@ -43,10 +43,41 @@ class SchedulerServiceTest {
         //TODO: hacer una subscripción de el servicio reactivo
         Flux<ProgramDate> response = schedulerService.generateCalendar(programId, startDate);
 
-        StepVerifier.create(response).expectNextCount(13).verifyComplete();//TODO: hacer de otro modo
+        //Assertions.assertEquals(getSnapResult(), new Gson().toJson(response));//TODO: hacer de otro modo
+        StepVerifier.create(response)
+                .expectNextMatches(programDate -> {
+                     return programDate.getDate().toString().equals("2022-01-03")
+                              && programDate.getCategoryName().equals("Principios");
+                  })
+                .expectNextMatches(programDate -> {
+                    return programDate.getDate().toString().equals("2022-01-04")
+                            && programDate.getCategoryName().equals("Bases");
+                })
+                .expectNextMatches(programDate -> {
+                    return programDate.getDate().toString().equals("2022-01-05")
+                            && programDate.getCategoryName().equals("Bases");
+                })
+                .expectNextMatches(programDate -> {
+                    return programDate.getDate().toString().equals("2022-01-06")
+                            && programDate.getCategoryName().equals("Fundamentos");
+                })
+                .expectNextMatches(programDate -> {
+                    return programDate.getDate().toString().equals("2022-01-07")
+                            && programDate.getCategoryName().equals("Fundamentos");
+                })
+                .expectNextMatches(programDate -> {
+                    return programDate.getDate().toString().equals("2022-01-10")
+                            && programDate.getCategoryName().equals("Fundamentos");
+                })
+                .verifyComplete();
 
-        Assertions.assertEquals(getSnapResult(), new Gson().toJson(response));//TODO: hacer de otro modo
+        //Assertions.assertEquals(13, response.size());//TODO: hacer de otro modo
+        StepVerifier.create(response)
+                .expectNextCount(6)
+                .verifyComplete();
+
         Mockito.verify(repository).findById(programId);
+
     }
 
     @Test
@@ -73,10 +104,10 @@ class SchedulerServiceTest {
         program.setName("Programa 2022");
         program.setCourses(new ArrayList<>());
         var timesForCourse1 = new ArrayList<Time>();
-        timesForCourse1.add(new Time("1", 2, "Principios", List.of()));
+        timesForCourse1.add(new Time("1", 1, "Principios", List.of()));
         timesForCourse1.add(new Time("2", 2, "Bases", List.of()));
-        timesForCourse1.add(new Time("3", 4, "Fundamentos", List.of()));
-        timesForCourse1.add(new Time("3", 5, "Fundamentos avazandos", List.of()));
+        timesForCourse1.add(new Time("3", 3, "Fundamentos", List.of()));
+        //timesForCourse1.add(new Time("3", 5, "Fundamentos avazandos", List.of()));
 
         program.getCourses().add(new CourseTime("xxx-z", "Introducción", timesForCourse1));
         return program;
