@@ -2,6 +2,7 @@ package co.com.sofka.calendar.services;
 
 import co.com.sofka.calendar.collections.Program;
 import co.com.sofka.calendar.model.ProgramDate;
+import co.com.sofka.calendar.repositories.ProgramDateRepository;
 import co.com.sofka.calendar.repositories.ProgramRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
